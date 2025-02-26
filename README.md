@@ -18,7 +18,7 @@
 Abra o terminal e navegue até a pasta do backend:
 ```sh
 cd backend
-npm install espress
+npm install express
 npm start 
 ```
 
@@ -27,13 +27,12 @@ npm start
 Em um novo terminal, acesse a pasta do frontend:
 ```sh
 cd frontend
-npm install vue
 npm install vite
 npm run dev
 ```
 
 ### 3️⃣ Acessar o Site
-Abra o navegador e vá até:
+No terminal do frontend aparecerá o link para acessar:
 ```
 http://192.168.56.1:5173/
 ```
