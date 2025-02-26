@@ -1,43 +1,40 @@
 let livros = require("./database");
 
+//Adicionar livro
 exports.adicionarLivro = (req, res) => {
   let { titulo, autor, anoPublicacao, codigo, disponibilidade } = req.body;
 
-  // Validações básicas
+  // Obrigando a preencher todos os campos
   if (!titulo || !autor || !anoPublicacao || codigo === undefined) {
     return res.status(400).json({ erro: "Todos os campos são obrigatórios" });
   }
 
   codigo = Number(codigo);
   anoPublicacao = Number(anoPublicacao);
+  disponibilidade = disponibilidade === true || disponibilidade === "true";
 
-  if (isNaN(codigo) || isNaN(anoPublicacao)) {
-    return res.status(400).json({ erro: "Código e ano de publicação devem ser numéricos" });
-  }
-
-  if (livros.some(l => l.codigo === codigo)) {
-    return res.status(400).json({ erro: "Código já existente" });
-  }
-
-  disponibilidade = disponibilidade === true || disponibilidade === "true"; // Garante booleano
-
+  // Adiciona o novo livro a lista
   livros.push({ titulo: titulo.trim(), autor: autor.trim(), anoPublicacao, codigo, disponibilidade });
   
   res.status(201).json({ mensagem: "Livro adicionado com sucesso" });
 };
 
+// Remover o livro pelo codigo
 exports.removerLivro = (req, res) => {
   const codigo = parseInt(req.params.codigo);
   const index = livros.findIndex(l => l.codigo === codigo);
 
+  // Ve se o livro existe
   if (index === -1) {
     return res.status(404).json({ erro: "Livro não encontrado" });
   }
 
+  // Remove o livro
   livros.splice(index, 1);
   res.status(200).json({ mensagem: "Livro removido com sucesso" });
 };
 
+// Buscar o livro pelo código
 exports.buscarLivro = (req, res) => {
   const codigo = parseInt(req.params.codigo);
   const livro = livros.find(l => l.codigo === codigo);
@@ -49,6 +46,7 @@ exports.buscarLivro = (req, res) => {
   res.json(livro);
 };
 
+// Listar todos os livros
 exports.listarLivros = (req, res) => {
   const { disponivel } = req.query;
 
