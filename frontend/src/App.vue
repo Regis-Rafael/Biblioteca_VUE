@@ -5,8 +5,8 @@
     <div class="p-4 bg-white rounded-lg shadow-md mb-6">
       <h3 class="text-lg font-bold text-gray-700 mb-2">Adicionar Livro:</h3>
       <div class=" grid-cols-1 sm:grid-cols-3 gap-4 items-center mb-4">
-        <input v-model="novoLivro.titulo" class="input w-full" placeholder="Título" />
-        <input v-model="novoLivro.autor" class="input w-full" placeholder="Autor" />
+        <input v-model="novoLivro.titulo" type="text" class="input w-full" placeholder="Título" />
+        <input v-model="novoLivro.autor" type="text" class="input w-full" placeholder="Autor" />
         <input v-model.number="novoLivro.anoPublicacao" type="number" class="input w-full" placeholder="Ano" />
       </div>
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -140,7 +140,6 @@ onMounted(carregarLivros);
   padding: 10px;
   width: 100%;
   margin-bottom: 10px;
-  margin-left: 10px;
   font-size: 16px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -232,7 +231,9 @@ input:checked + .toggle:before {
     width: 100%;
   }
   #livrosTable {
-    font-size: 14px;
+    align-items: center;
+    font-size: 8px;
+    padding: 0px;
   }
 }
 </style>
