@@ -126,16 +126,6 @@ const buscarLivroPorCodigo = () => {
     return;
   }
 
-  // Verifica se o livro esta disponivel
-  if (novoLivro.value.disponibilidade === false){
-    let continuar = prompt("Livro indisponível!\nDeseja continuar? (s/n)");
-    if (continuar !== "s") {
-      return;
-    } else {
-      livrosFiltrados.value = livros.value;
-    }
-  }
-
   if (isNaN(codigoBusca.value)) {
     alert("Digite um código válido!");
     return;
@@ -145,6 +135,13 @@ const buscarLivroPorCodigo = () => {
   if (resultado.length === 0) {
     alert("Livro não encontrado!");
     return;
+  }
+
+  if (!resultado[0].disponibilidade) {
+    let continuar = prompt("Livro indisponível!\nDeseja continuar? (s/n)");
+    if (continuar !== "s") {
+      return;
+    }
   }
 
   livrosFiltrados.value = resultado;
