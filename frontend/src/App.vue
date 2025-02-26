@@ -23,6 +23,7 @@
 
     <div class="p-4 bg-white rounded-lg shadow-md mb-6">
       <h3 class="text-lg font-bold text-gray-700 mb-2">Pesquisar Livro:</h3>
+      <h5 class="text-lg font-bold text-gray-700 mb-4 text-center">(Deixe em branco para listar todos)</h5>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <input v-model="codigoBusca" class="input w-full" placeholder="Código do Livro" />
         <button @click="buscarLivroPorCodigo" class="btn w-full">Buscar</button>
@@ -62,6 +63,7 @@
 </template>
 
 <script setup>
+// Pega o ref e o onMouted do backend pelo vite.config.js
 import { ref, onMounted } from "vue";
 import axios from "axios";
 
@@ -70,6 +72,7 @@ const livrosFiltrados = ref([]);
 const novoLivro = ref({ titulo: "", autor: "", anoPublicacao: "", disponibilidade: false });
 const codigoBusca = ref("");
 
+// Carrega os livros da api
 const carregarLivros = async () => {
   try {
     const res = await axios.get("/api/livros");
@@ -80,6 +83,7 @@ const carregarLivros = async () => {
   }
 };
 
+// o nome ja diz
 const adicionarLivro = async () => {
   if (!novoLivro.value.titulo || !novoLivro.value.autor || !novoLivro.value.anoPublicacao) {
     alert("Preencha todos os campos!");
@@ -94,6 +98,7 @@ const adicionarLivro = async () => {
       disponibilidade: novoLivro.value.disponibilidade,
       codigo: novoCodigo,
     });
+    // Limpa as lacunas
     novoLivro.value = { titulo: "", autor: "", anoPublicacao: "", disponibilidade: false };
     carregarLivros();
   } catch (error) {
@@ -102,6 +107,7 @@ const adicionarLivro = async () => {
   }
 };
 
+// FRemove o livro pelo codigo
 const removerLivro = async (codigo) => {
   try {
     await axios.delete(`/api/livros/${codigo}`);
@@ -113,11 +119,23 @@ const removerLivro = async (codigo) => {
   }
 };
 
+// Buscar um livro pelo codigo
 const buscarLivroPorCodigo = () => {
   if (!codigoBusca.value) {
     livrosFiltrados.value = livros.value;
     return;
   }
+
+  // Verifica se o livro esta disponivel
+  if (novoLivro.value.disponibilidade === false){
+    let continuar = prompt("Livro indisponível!\nDeseja continuar? (s/n)");
+    if (continuar !== "s") {
+      return;
+    } else {
+      livrosFiltrados.value = livros.value;
+    }
+  }
+
   if (isNaN(codigoBusca.value)) {
     alert("Digite um código válido!");
     return;
@@ -132,8 +150,11 @@ const buscarLivroPorCodigo = () => {
   livrosFiltrados.value = resultado;
 };
 
+// Carrega os livros quando o componente é montado
 onMounted(carregarLivros);
+
 </script>
+
 
 <style scoped>
 .input {
